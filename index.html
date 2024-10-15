@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlayMusic</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/b00273dc78.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="music-player">
+            <nav>
+                <div class="circle">
+                    <i class="fa-solid fa-angle-left"></i>
+                </div>
+                <div class="circle">
+                    <i class="fa-solid fa-bars"></i>
+                </div>
+            </nav>
+            <img src="media/thumbnail.png" alt="" class="song-img">
+            <h1> Song </h1>
+            <p> Artiste name </p>
+
+            <audio  id="song">
+                <source src="media/ColdSteeze.mp3" type="audio/mpeg">
+            </audio>
+            <input type="range" value="0" id="progress">
+            <div class="controls">
+                <div><i class="fa-solid fa-backward"></i></div>
+                <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div>
+                <div><i class="fa-solid fa-forward"></i></div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let progress = document.getElementById("progress");
+        let song = document.getElementById("song");
+        let cntrlIcon = document.getElementById("ctrlIcon");
+
+        song.onloadedmetadata = function(){
+            progress.max = song.duration ;
+            progress.value = song.currentTime;
+        }
+        function playPause(){
+            if(cntrlIcon.classList.contains("fa-pause")){
+                song.pause();
+                cntrlIcon.classList.remove("fa-pause");
+                cntrlIcon.classList.add("fa-play");
+
+            }else{
+                song.play();
+                cntrlIcon.classList.remove("fa-play");
+                cntrlIcon.classList.add("fa-pause");
+            }
+
+        }
+     setInterval(() => {
+        if (!song.paused) {
+            progress.value = song.currentTime;
+        }
+    }, 500);
+
+// Seek song when progress bar is changed
+    progress.oninput = function () {
+        song.currentTime = progress.value;
+    };
+
+    // Keep play/pause state when seeking
+    progress.onchange = function () {
+        if (!song.paused) {
+            song.play();
+            cntrlIcon.classList.remove("fa-play");
+            cntrlIcon.classList.add("fa-pause");
+        }
+    }
+    </script>
+</body>
+</html>
